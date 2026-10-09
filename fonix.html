@@ -1,0 +1,4062 @@
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Fonix</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: Arial, sans-serif;
+
+    background: #d97706;
+
+    color: #2b1600;
+}
+
+
+/* =====================================================
+   공통 화면
+===================================================== */
+
+.calendar-container,
+.event-screen {
+
+    width: 1000px;
+    height: 850px;
+
+    background: #fff7ed;
+
+    border-radius: 24px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,0.25);
+}
+
+
+/* =====================================================
+   메인 달력
+===================================================== */
+
+.calendar-container {
+    display: block;
+}
+
+.top-bar {
+
+    height: 65px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+.month-title {
+
+    font-size: 40px;
+
+    font-weight: bold;
+
+    text-align: center;
+
+    flex: 1;
+}
+
+.nav-button {
+
+    width: 55px;
+    height: 55px;
+
+    border: none;
+
+    border-radius: 15px;
+
+    background: #f59e0b;
+
+    color: white;
+
+    font-size: 30px;
+
+    cursor: pointer;
+}
+
+.nav-button:hover {
+
+    background: #ea580c;
+}
+
+
+/* =====================================================
+   위쪽 버튼
+===================================================== */
+
+.top-tools {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin: 10px 0 22px 0;
+}
+
+.tool-button {
+
+    border: none;
+
+    border-radius: 11px;
+
+    padding: 10px 16px;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.year-button {
+
+    background: #fb923c;
+}
+
+.holiday-button {
+
+    background: #9ca3af;
+}
+
+.timetable-button {
+
+    background: #ea580c;
+}
+
+.tool-button:hover {
+
+    opacity: 0.85;
+}
+
+
+/* =====================================================
+   요일
+===================================================== */
+
+.weekdays {
+
+    height: 42px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, 1fr);
+
+    gap: 8px;
+}
+
+.weekday {
+
+    text-align: center;
+
+    font-weight: bold;
+
+    font-size: 18px;
+
+    padding: 9px 0;
+}
+
+
+/* =====================================================
+   날짜
+===================================================== */
+
+.days {
+
+    height: 550px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(7,1fr);
+
+    grid-template-rows:
+        repeat(6,1fr);
+
+    gap: 8px;
+}
+
+.day {
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 7px;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    position: relative;
+
+    border: 2px solid transparent;
+}
+
+.day:hover {
+
+    background: #ffedd5;
+}
+
+.empty {
+
+    background: transparent;
+
+    cursor: default;
+}
+
+.empty:hover {
+
+    background: transparent;
+}
+
+
+/* =====================================================
+   방학
+===================================================== */
+
+.holiday-day {
+
+    background: #d1d5db !important;
+
+    color: #4b5563;
+}
+
+.holiday-day:hover {
+
+    background: #c4c8ce !important;
+}
+
+
+/* =====================================================
+   오늘
+===================================================== */
+
+.today {
+
+    background: #fb923c !important;
+
+    color: white;
+
+    font-weight: bold;
+}
+
+.today.holiday-day {
+
+    background: #9ca3af !important;
+
+    color: white;
+}
+
+
+/* =====================================================
+   날짜 숫자
+===================================================== */
+
+.day-number {
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    margin-bottom: 4px;
+}
+
+
+/* =====================================================
+   달력 안 일정
+===================================================== */
+
+.day-events {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.calendar-event {
+
+    font-size: 11px;
+
+    line-height: 14px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    font-weight: normal;
+}
+
+.more-events {
+
+    font-size: 10px;
+
+    margin-top: 2px;
+
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   일정 화면
+===================================================== */
+
+.event-screen {
+
+    display: none;
+}
+
+.event-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+}
+
+.back-button {
+
+    border: none;
+
+    border-radius: 12px;
+
+    padding: 12px 18px;
+
+    background: #f59e0b;
+
+    color: white;
+
+    font-size: 17px;
+
+    cursor: pointer;
+}
+
+.event-date {
+
+    font-size: 36px;
+
+    font-weight: bold;
+}
+
+.event-holiday-label {
+
+    margin-top: 10px;
+
+    font-size: 15px;
+
+    color: #6b7280;
+}
+
+.event-list {
+
+    margin-top: 30px;
+
+    height: 600px;
+
+    overflow-y: auto;
+}
+
+.no-events {
+
+    text-align: center;
+
+    margin-top: 100px;
+
+    font-size: 22px;
+
+    color: #777;
+}
+
+.event-item {
+
+    background: white;
+
+    border-radius: 15px;
+
+    padding: 18px;
+
+    margin-bottom: 12px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.event-info {
+
+    display: flex;
+
+    gap: 20px;
+
+    align-items: center;
+}
+
+.event-time {
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    color: #ea580c;
+
+    min-width: 80px;
+}
+
+.event-name {
+
+    font-size: 20px;
+}
+
+.event-repeat {
+
+    font-size: 13px;
+
+    color: #888;
+
+    margin-top: 5px;
+}
+
+.event-mode {
+
+    font-size: 12px;
+
+    color: #f97316;
+
+    margin-top: 4px;
+}
+
+.delete-button {
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 9px 12px;
+
+    background: #ef4444;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.add-event-button {
+
+    width: 100%;
+
+    padding: 16px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: #f97316;
+
+    color: white;
+
+    font-size: 19px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   모달
+===================================================== */
+
+.modal {
+
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,0.6);
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 50;
+}
+
+.modal-content {
+
+    width: 530px;
+
+    max-width: 92%;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #fff7ed;
+
+    border-radius: 22px;
+
+    padding: 30px;
+}
+
+.modal-title {
+
+    font-size: 30px;
+
+    font-weight: bold;
+
+    margin-bottom: 20px;
+}
+
+.input-label {
+
+    display: block;
+
+    margin-top: 15px;
+
+    margin-bottom: 7px;
+
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"] {
+
+    width: 100%;
+
+    padding: 12px;
+
+    border: 2px solid #fed7aa;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+}
+
+
+/* =====================================================
+   반복
+===================================================== */
+
+.repeat-box {
+
+    margin-top: 20px;
+
+    padding: 15px;
+
+    background: white;
+
+    border-radius: 12px;
+}
+
+.repeat-days {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, 1fr);
+
+    gap: 5px;
+
+    margin-top: 12px;
+}
+
+.day-choice {
+
+    text-align: center;
+
+    padding: 9px 3px;
+
+    border-radius: 8px;
+
+    background: #eee;
+
+    cursor: pointer;
+
+    font-size: 13px;
+}
+
+.day-choice.selected {
+
+    background: #fb923c;
+
+    color: white;
+
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   일정 적용 대상
+===================================================== */
+
+.event-scope-box {
+
+    margin-top: 20px;
+
+    padding: 15px;
+
+    background: white;
+
+    border-radius: 12px;
+}
+
+.scope-option {
+
+    display: block;
+
+    margin: 10px 0;
+
+    padding: 11px;
+
+    border-radius: 10px;
+
+    background: #f3f4f6;
+
+    cursor: pointer;
+}
+
+.modal-buttons {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+.save-button,
+.cancel-button {
+
+    flex: 1;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    color: white;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+.save-button {
+
+    background: #f97316;
+}
+
+.cancel-button {
+
+    background: #777;
+}
+
+
+/* =====================================================
+   방학 설정
+===================================================== */
+
+.holiday-list {
+
+    max-height: 280px;
+
+    overflow-y: auto;
+
+    margin-top: 20px;
+}
+
+.holiday-item {
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 13px;
+
+    margin-bottom: 10px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.holiday-name {
+
+    font-weight: bold;
+}
+
+.holiday-dates {
+
+    font-size: 13px;
+
+    color: #777;
+
+    margin-top: 4px;
+}
+
+.small-delete {
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 8px 10px;
+
+    background: #ef4444;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   1년 달력
+===================================================== */
+
+.year-modal {
+
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,0.6);
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 40;
+}
+
+.year-modal-content {
+
+    width: 1000px;
+
+    height: 850px;
+
+    max-width: 95%;
+
+    background: #fff7ed;
+
+    border-radius: 24px;
+
+    padding: 30px;
+
+    overflow-y: auto;
+}
+
+.year-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 25px;
+}
+
+.year-title {
+
+    font-size: 38px;
+
+    font-weight: bold;
+}
+
+.year-nav {
+
+    display: flex;
+
+    gap: 8px;
+}
+
+.year-nav button {
+
+    padding: 10px 15px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #f59e0b;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.close-button {
+
+    background: #ef4444 !important;
+}
+
+.year-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap: 20px;
+}
+
+.mini-month {
+
+    background: white;
+
+    border-radius: 16px;
+
+    padding: 15px;
+
+    cursor: pointer;
+}
+
+.mini-month:hover {
+
+    background: #ffedd5;
+}
+
+.mini-title {
+
+    text-align: center;
+
+    font-weight: bold;
+
+    font-size: 21px;
+
+    margin-bottom: 10px;
+}
+
+.mini-weekdays,
+.mini-days {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(7,1fr);
+
+    gap: 3px;
+}
+
+.mini-weekday {
+
+    text-align: center;
+
+    font-size: 11px;
+
+    font-weight: bold;
+}
+
+.mini-day {
+
+    text-align: center;
+
+    font-size: 12px;
+
+    padding: 5px 0;
+
+    border-radius: 5px;
+}
+
+.mini-today {
+
+    background: #fb923c;
+
+    color: white;
+
+    font-weight: bold;
+}
+
+.mini-holiday {
+
+    background: #d1d5db;
+
+    color: #4b5563;
+}
+
+
+/* =====================================================
+   주간 시간표
+===================================================== */
+
+.timetable-modal {
+
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,0.6);
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 60;
+}
+
+.timetable-content {
+
+    width: 1150px;
+
+    max-width: 96%;
+
+    height: 92vh;
+
+    background: #fff7ed;
+
+    border-radius: 24px;
+
+    padding: 25px;
+
+    overflow-y: auto;
+}
+
+.timetable-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.timetable-title {
+
+    font-size: 35px;
+
+    font-weight: bold;
+}
+
+.timetable-close {
+
+    border: none;
+
+    border-radius: 10px;
+
+    width: 45px;
+
+    height: 45px;
+
+    background: #ef4444;
+
+    color: white;
+
+    font-size: 23px;
+
+    cursor: pointer;
+}
+
+
+/* 시간표 테이블 */
+
+.timetable {
+
+    width: 100%;
+
+    border-collapse: separate;
+
+    border-spacing: 6px;
+
+    table-layout: fixed;
+}
+
+.timetable th {
+
+    background: #f59e0b;
+
+    color: white;
+
+    padding: 14px 5px;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+}
+
+.timetable th:first-child {
+
+    width: 125px;
+}
+
+.timetable td {
+
+    height: 58px;
+
+    background: white;
+
+    border-radius: 10px;
+
+    text-align: center;
+
+    vertical-align: middle;
+
+    padding: 5px;
+
+    cursor: pointer;
+
+    transition: 0.15s;
+}
+
+.timetable td:hover {
+
+    background: #ffedd5;
+}
+
+.slot-name {
+
+    background: #fed7aa !important;
+
+    font-weight: bold;
+
+    cursor: default !important;
+
+    color: #9a3412;
+
+    line-height: 1.25;
+}
+
+.slot-name-label {
+
+    display: block;
+
+    font-size: 14px;
+}
+
+.slot-name-time {
+
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 11px;
+
+    font-weight: normal;
+
+    color: #7c2d12;
+}
+
+.timetable-cell {
+
+    font-size: 14px;
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+}
+
+.empty-timetable {
+
+    color: #aaa;
+
+    font-size: 12px;
+}
+
+
+/* Bryant */
+
+.bryant-row .slot-name {
+
+    background: #fdba74 !important;
+}
+
+
+/* 시간표 입력 모달 */
+/* 시간표 입력창은 시간표 화면보다 위에 표시 */
+#timetableInputModal {
+    z-index: 1000 !important;
+}
+
+.timetable-input-content {
+
+    width: 450px;
+
+    max-width: 90%;
+}
+
+
+/* =====================================================
+   반응형
+===================================================== */
+
+@media (max-width: 850px) {
+
+    .calendar-container,
+    .event-screen {
+
+        width: 95%;
+
+        height: 850px;
+    }
+
+    .timetable-content {
+
+        width: 98%;
+
+        padding: 12px;
+    }
+
+    .timetable th:first-child {
+
+        width: 90px;
+    }
+
+    .timetable th,
+    .timetable td {
+
+        font-size: 11px;
+
+        padding: 5px;
+    }
+
+    .timetable td {
+
+        height: 50px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     메인 달력
+===================================================== -->
+
+<div
+    class="calendar-container"
+    id="calendarScreen"
+>
+
+    <div class="top-bar">
+
+        <button
+            class="nav-button"
+            onclick="changeMonth(-1)"
+        >
+            ←
+        </button>
+
+
+        <div
+            class="month-title"
+            id="monthTitle"
+        ></div>
+
+
+        <button
+            class="nav-button"
+            onclick="changeMonth(1)"
+        >
+            →
+        </button>
+
+    </div>
+
+
+    <div class="top-tools">
+
+        <button
+            class="tool-button year-button"
+            onclick="openYearCalendar()"
+        >
+            📅 1년 달력
+        </button>
+
+
+        <button
+            class="tool-button timetable-button"
+            onclick="openTimetable()"
+        >
+            🏫 학교 일반 일정
+        </button>
+
+
+        <button
+            class="tool-button holiday-button"
+            onclick="openHolidaySettings()"
+        >
+            🏖 방학 및 쉬는 날 설정
+        </button>
+
+    </div>
+
+
+    <div class="weekdays">
+
+        <div class="weekday">일</div>
+        <div class="weekday">월</div>
+        <div class="weekday">화</div>
+        <div class="weekday">수</div>
+        <div class="weekday">목</div>
+        <div class="weekday">금</div>
+        <div class="weekday">토</div>
+
+    </div>
+
+
+    <div
+        class="days"
+        id="days"
+    ></div>
+
+</div>
+
+
+<!-- =====================================================
+     날짜 일정 화면
+===================================================== -->
+
+<div
+    class="event-screen"
+    id="eventScreen"
+>
+
+    <div class="event-header">
+
+        <button
+            class="back-button"
+            onclick="backToCalendar()"
+        >
+            ← 달력
+        </button>
+
+
+        <div>
+
+            <div
+                class="event-date"
+                id="eventDate"
+            ></div>
+
+
+            <div
+                class="event-holiday-label"
+                id="eventHolidayLabel"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="event-list"
+        id="eventList"
+    ></div>
+
+
+    <button
+        class="add-event-button"
+        onclick="openEventModal()"
+    >
+        + 일정 추가
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     일정 추가
+===================================================== -->
+
+<div
+    class="modal"
+    id="eventModal"
+>
+
+    <div class="modal-content">
+
+        <div class="modal-title">
+            일정 추가
+        </div>
+
+
+        <label class="input-label">
+            날짜
+        </label>
+
+        <input
+            type="date"
+            id="eventDateInput"
+        >
+
+
+        <label class="input-label">
+            시간
+        </label>
+
+        <input
+            type="time"
+            id="eventTimeInput"
+        >
+
+
+        <label class="input-label">
+            일정
+        </label>
+
+        <input
+            type="text"
+            id="eventNameInput"
+            placeholder="예: 수학 숙제"
+        >
+
+
+        <div class="repeat-box">
+
+            <label>
+
+                <input
+                    type="checkbox"
+                    id="repeatCheckbox"
+                    onchange="toggleRepeat()"
+                >
+
+                매주 반복
+
+            </label>
+
+
+            <div
+                id="repeatOptions"
+                style="display:none;"
+            >
+
+                <label class="input-label">
+                    반복할 요일
+                </label>
+
+
+                <div class="repeat-days">
+
+                    <div
+                        class="day-choice"
+                        data-day="0"
+                    >일</div>
+
+                    <div
+                        class="day-choice"
+                        data-day="1"
+                    >월</div>
+
+                    <div
+                        class="day-choice"
+                        data-day="2"
+                    >화</div>
+
+                    <div
+                        class="day-choice"
+                        data-day="3"
+                    >수</div>
+
+                    <div
+                        class="day-choice"
+                        data-day="4"
+                    >목</div>
+
+                    <div
+                        class="day-choice"
+                        data-day="5"
+                    >금</div>
+
+                    <div
+                        class="day-choice"
+                        data-day="6"
+                    >토</div>
+
+                </div>
+
+
+                <label class="input-label">
+                    반복 시작
+                </label>
+
+                <input
+                    type="date"
+                    id="repeatStart"
+                >
+
+
+                <label class="input-label">
+                    반복 종료
+                </label>
+
+                <input
+                    type="date"
+                    id="repeatEnd"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="event-scope-box">
+
+            <strong>
+                이 일정은 언제 표시할까요?
+            </strong>
+
+
+            <label class="scope-option">
+
+                <input
+                    type="radio"
+                    name="eventScope"
+                    value="all"
+                    checked
+                >
+
+                항상 표시
+
+            </label>
+
+
+            <label class="scope-option">
+
+                <input
+                    type="radio"
+                    name="eventScope"
+                    value="school"
+                >
+
+                🏫 학교일에만
+
+            </label>
+
+
+            <label class="scope-option">
+
+                <input
+                    type="radio"
+                    name="eventScope"
+                    value="holiday"
+                >
+
+                🏖 방학/쉬는 날에만
+
+            </label>
+
+        </div>
+
+
+        <label class="input-label">
+            알람 시간
+        </label>
+
+        <input
+            type="time"
+            id="alarmTimeInput"
+        >
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="cancel-button"
+                onclick="closeEventModal()"
+            >
+                취소
+            </button>
+
+
+            <button
+                class="save-button"
+                onclick="saveEvent()"
+            >
+                저장
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     방학
+===================================================== -->
+
+<div
+    class="modal"
+    id="holidayModal"
+>
+
+    <div class="modal-content">
+
+        <div class="modal-title">
+            🏖 방학 및 쉬는 날 설정
+        </div>
+
+
+        <label class="input-label">
+            이름
+        </label>
+
+        <input
+            type="text"
+            id="holidayName"
+            placeholder="예: 겨울방학"
+        >
+
+
+        <label class="input-label">
+            시작일
+        </label>
+
+        <input
+            type="date"
+            id="holidayStart"
+        >
+
+
+        <label class="input-label">
+            종료일
+        </label>
+
+        <input
+            type="date"
+            id="holidayEnd"
+        >
+
+
+        <button
+            class="add-event-button"
+            style="margin-top:20px;"
+            onclick="saveHoliday()"
+        >
+            + 기간 추가
+        </button>
+
+
+        <div
+            class="holiday-list"
+            id="holidayList"
+        ></div>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="cancel-button"
+                onclick="closeHolidaySettings()"
+            >
+                닫기
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     1년 달력
+===================================================== -->
+
+<div
+    class="year-modal"
+    id="yearModal"
+>
+
+    <div class="year-modal-content">
+
+        <div class="year-header">
+
+            <div
+                class="year-title"
+                id="yearTitle"
+            ></div>
+
+
+            <div class="year-nav">
+
+                <button
+                    onclick="changeYear(-1)"
+                >
+                    ← 이전 연도
+                </button>
+
+
+                <button
+                    onclick="changeYear(1)"
+                >
+                    다음 연도 →
+                </button>
+
+
+                <button
+                    class="close-button"
+                    onclick="closeYearCalendar()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="year-grid"
+            id="yearGrid"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     학교 일반 일정 / 주간 시간표
+===================================================== -->
+
+<div
+    class="timetable-modal"
+    id="timetableModal"
+>
+
+    <div class="timetable-content">
+
+        <div class="timetable-header">
+
+            <div class="timetable-title">
+                🏫 학교 일반 일정
+            </div>
+
+
+            <button
+                class="timetable-close"
+                onclick="closeTimetable()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <table class="timetable">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        시간표
+                    </th>
+
+                    <th>
+                        월
+                    </th>
+
+                    <th>
+                        화
+                    </th>
+
+                    <th>
+                        수
+                    </th>
+
+                    <th>
+                        목
+                    </th>
+
+                    <th>
+                        금
+                    </th>
+
+                    <th>
+                        토
+                    </th>
+
+                    <th>
+                        일
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="timetableBody"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     시간표 칸 입력
+===================================================== -->
+
+<div
+    class="modal"
+    id="timetableInputModal"
+>
+
+    <div
+        class="modal-content timetable-input-content"
+    >
+
+        <div
+            class="modal-title"
+            id="timetableInputTitle"
+        >
+            시간표 입력
+        </div>
+
+
+        <label class="input-label">
+            이 시간에 무엇을 하나요?
+        </label>
+
+
+        <input
+            type="text"
+            id="timetableInput"
+            placeholder="예: Maths / English / CCA"
+        >
+
+
+        <label class="input-label">
+            Teacher
+        </label>
+
+
+        <input
+            type="text"
+            id="timetableTutorInput"
+            placeholder="예: Mr. Smith"
+        >
+
+
+        <label class="input-label">
+            어디서 하나요?
+        </label>
+
+
+        <input
+            type="text"
+            id="timetableLocationInput"
+            placeholder="예: Room 302 / Science Lab"
+        >
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="cancel-button"
+                onclick="closeTimetableInput()"
+            >
+                취소
+            </button>
+
+
+            <button
+                class="save-button"
+                onclick="saveTimetableCell()"
+            >
+                저장
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   기본 설정
+===================================================== */
+
+let currentDate =
+    new Date();
+
+let selectedDate =
+    null;
+
+let yearCalendarYear =
+    currentDate.getFullYear();
+
+
+/* 일정 */
+
+let events =
+    JSON.parse(
+        localStorage.getItem(
+            "calendarEvents"
+        )
+    ) || [];
+
+
+/* 방학 */
+
+let holidays =
+    JSON.parse(
+        localStorage.getItem(
+            "calendarHolidays"
+        )
+    ) || [];
+
+
+/* 시간표 */
+
+let timetable =
+    JSON.parse(
+        localStorage.getItem(
+            "schoolTimetable"
+        )
+    ) || {};
+
+
+let currentTimetableRow =
+    null;
+
+let currentTimetableDay =
+    null;
+
+
+const monthNames = [
+
+    "1월",
+    "2월",
+    "3월",
+    "4월",
+    "5월",
+    "6월",
+    "7월",
+    "8월",
+    "9월",
+    "10월",
+    "11월",
+    "12월"
+
+];
+
+
+const weekNames = [
+
+    "일",
+    "월",
+    "화",
+    "수",
+    "목",
+    "금",
+    "토"
+
+];
+
+
+/* 시간표 줄 */
+
+const timetableRows = [
+
+    "Registration",
+    "Period 1",
+    "Period 2",
+    "Break",
+    "Period 3",
+    "Period 4",
+    "Period 5",
+    "Period 6",
+    "Lunch",
+    "Period 7",
+    "Period 8",
+    "Period 9",
+    "Period 10",
+    "CCA",
+    "Bryant"
+
+];
+
+
+/* 학교 실제 시간 */
+const timetableTimes = {
+
+    "Registration": "8:10 ~ 8:40",
+    "Period 1": "8:40 ~ 9:15",
+    "Period 2": "9:15 ~ 9:50",
+    "Break": "9:50 ~ 10:15",
+    "Period 3": "10:15 ~ 10:50",
+    "Period 4": "10:50 ~ 11:25",
+    "Period 5": "11:30 ~ 12:05",
+    "Period 6": "12:05 ~ 12:40",
+    "Lunch": "12:40 ~ 13:35",
+    "Period 7": "13:35 ~ 14:10",
+    "Period 8": "14:10 ~ 14:45",
+    "Period 9": "14:50 ~ 15:25",
+    "Period 10": "15:25 ~ 16:00",
+    "CCA": "16:15 ~ 17:15",
+    "Bryant": ""
+
+};
+
+
+/* =====================================================
+   한국 시간
+===================================================== */
+
+function getKoreaDate() {
+
+    const koreaTime =
+        new Date().toLocaleString(
+            "en-US",
+            {
+                timeZone:
+                    "Asia/Seoul"
+            }
+        );
+
+    return new Date(
+        koreaTime
+    );
+}
+
+
+/* =====================================================
+   날짜 문자열
+===================================================== */
+
+function dateString(date) {
+
+    const year =
+        date.getFullYear();
+
+    const month =
+        String(
+            date.getMonth() + 1
+        ).padStart(2,"0");
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(2,"0");
+
+    return (
+        year +
+        "-" +
+        month +
+        "-" +
+        day
+    );
+}
+
+
+/* =====================================================
+   저장
+===================================================== */
+
+function saveEvents() {
+
+    localStorage.setItem(
+        "calendarEvents",
+        JSON.stringify(events)
+    );
+
+}
+
+
+function saveHolidays() {
+
+    localStorage.setItem(
+        "calendarHolidays",
+        JSON.stringify(holidays)
+    );
+
+}
+
+
+function saveTimetable() {
+
+    localStorage.setItem(
+        "schoolTimetable",
+        JSON.stringify(timetable)
+    );
+
+}
+
+
+/* =====================================================
+   방학 여부
+===================================================== */
+
+function isHoliday(date) {
+
+    const target =
+        dateString(date);
+
+    return holidays.some(
+        holiday =>
+            target >= holiday.start &&
+            target <= holiday.end
+    );
+
+}
+
+
+function getHolidayName(date) {
+
+    const target =
+        dateString(date);
+
+    const holiday =
+        holidays.find(
+            h =>
+                target >= h.start &&
+                target <= h.end
+        );
+
+    return holiday
+        ? holiday.name
+        : "";
+
+}
+
+
+/* =====================================================
+   일정 적용 여부
+===================================================== */
+
+function eventAppliesToDate(
+    event,
+    date
+) {
+
+    const holiday =
+        isHoliday(date);
+
+
+    if (
+        event.scope === "school" &&
+        holiday
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        event.scope === "holiday" &&
+        !holiday
+    ) {
+
+        return false;
+
+    }
+
+
+    const target =
+        dateString(date);
+
+
+    if (!event.repeat) {
+
+        return (
+            event.date ===
+            target
+        );
+
+    }
+
+
+    const start =
+        new Date(
+            event.repeatStart
+        );
+
+    const end =
+        new Date(
+            event.repeatEnd
+        );
+
+
+    if (
+        date < start ||
+        date > end
+    ) {
+
+        return false;
+
+    }
+
+
+    return event.repeatDays.includes(
+        date.getDay()
+    );
+
+}
+
+
+/* =====================================================
+   날짜 일정
+===================================================== */
+
+function getEventsForDate(date) {
+
+    return events.filter(
+        event =>
+            eventAppliesToDate(
+                event,
+                date
+            )
+    );
+
+}
+
+
+/* =====================================================
+   메인 달력
+===================================================== */
+
+function renderCalendar() {
+
+    const year =
+        currentDate.getFullYear();
+
+    const month =
+        currentDate.getMonth();
+
+
+    document.getElementById(
+        "monthTitle"
+    ).textContent =
+        `${year}년 ${monthNames[month]}`;
+
+
+    const container =
+        document.getElementById(
+            "days"
+        );
+
+    container.innerHTML = "";
+
+
+    const firstDay =
+        new Date(
+            year,
+            month,
+            1
+        ).getDay();
+
+
+    const daysInMonth =
+        new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
+
+
+    /* 빈칸 */
+
+    for (
+        let i = 0;
+        i < firstDay;
+        i++
+    ) {
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+        empty.classList.add(
+            "day",
+            "empty"
+        );
+
+        container.appendChild(
+            empty
+        );
+
+    }
+
+
+    /* 날짜 */
+
+    for (
+        let day = 1;
+        day <= daysInMonth;
+        day++
+    ) {
+
+        const date =
+            new Date(
+                year,
+                month,
+                day
+            );
+
+
+        const dayElement =
+            document.createElement(
+                "div"
+            );
+
+        dayElement.classList.add(
+            "day"
+        );
+
+
+        /* 방학 */
+
+        if (
+            isHoliday(date)
+        ) {
+
+            dayElement.classList.add(
+                "holiday-day"
+            );
+
+        }
+
+
+        /* 오늘 */
+
+        const today =
+            getKoreaDate();
+
+
+        if (
+            day === today.getDate() &&
+            month === today.getMonth() &&
+            year === today.getFullYear()
+        ) {
+
+            dayElement.classList.add(
+                "today"
+            );
+
+        }
+
+
+        const number =
+            document.createElement(
+                "div"
+            );
+
+        number.classList.add(
+            "day-number"
+        );
+
+        number.textContent =
+            day;
+
+
+        dayElement.appendChild(
+            number
+        );
+
+
+        /* 일정 */
+
+        const dayEvents =
+            getEventsForDate(
+                date
+            );
+
+
+        if (
+            dayEvents.length > 0
+        ) {
+
+            const eventsContainer =
+                document.createElement(
+                    "div"
+                );
+
+            eventsContainer.classList.add(
+                "day-events"
+            );
+
+
+            const visible =
+                dayEvents.slice(
+                    0,
+                    3
+                );
+
+
+            visible.forEach(
+                event => {
+
+                    const item =
+                        document.createElement(
+                            "div"
+                        );
+
+                    item.classList.add(
+                        "calendar-event"
+                    );
+
+                    item.textContent =
+                        `- ${event.time} ${event.name}`;
+
+                    eventsContainer.appendChild(
+                        item
+                    );
+
+                }
+            );
+
+
+            if (
+                dayEvents.length > 3
+            ) {
+
+                const more =
+                    document.createElement(
+                        "div"
+                    );
+
+                more.classList.add(
+                    "more-events"
+                );
+
+                more.textContent =
+                    `+ ${dayEvents.length - 3}개`;
+
+                eventsContainer.appendChild(
+                    more
+                );
+
+            }
+
+
+            dayElement.appendChild(
+                eventsContainer
+            );
+
+        }
+
+
+        dayElement.onclick =
+            function() {
+
+                openEventScreen(
+                    date
+                );
+
+            };
+
+
+        container.appendChild(
+            dayElement
+        );
+
+    }
+
+
+    /* 항상 42칸 */
+
+    const total =
+        firstDay +
+        daysInMonth;
+
+
+    for (
+        let i = total;
+        i < 42;
+        i++
+    ) {
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+        empty.classList.add(
+            "day",
+            "empty"
+        );
+
+        container.appendChild(
+            empty
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   月 이동
+===================================================== */
+
+function changeMonth(
+    amount
+) {
+
+    currentDate.setMonth(
+        currentDate.getMonth()
+        + amount
+    );
+
+    renderCalendar();
+
+}
+
+
+/* =====================================================
+   일정 화면
+===================================================== */
+
+function openEventScreen(
+    date
+) {
+
+    selectedDate =
+        new Date(date);
+
+
+    document.getElementById(
+        "calendarScreen"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "eventScreen"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "eventDate"
+    ).textContent =
+        `${selectedDate.getFullYear()}년 ` +
+        `${selectedDate.getMonth() + 1}월 ` +
+        `${selectedDate.getDate()}일`;
+
+
+    const label =
+        document.getElementById(
+            "eventHolidayLabel"
+        );
+
+
+    if (
+        isHoliday(
+            selectedDate
+        )
+    ) {
+
+        label.textContent =
+            "🏖 " +
+            getHolidayName(
+                selectedDate
+            );
+
+    }
+    else {
+
+        label.textContent =
+            "🏫 학교일";
+
+    }
+
+
+    renderEvents();
+
+}
+
+
+function backToCalendar() {
+
+    document.getElementById(
+        "eventScreen"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "calendarScreen"
+    ).style.display =
+        "block";
+
+
+    renderCalendar();
+
+}
+
+
+/* =====================================================
+   일정 목록
+===================================================== */
+
+function renderEvents() {
+
+    const list =
+        document.getElementById(
+            "eventList"
+        );
+
+    list.innerHTML = "";
+
+
+    const dayEvents =
+        getEventsForDate(
+            selectedDate
+        );
+
+
+    if (
+        dayEvents.length === 0
+    ) {
+
+        list.innerHTML =
+            `
+            <div class="no-events">
+                일정이 없습니다.
+            </div>
+            `;
+
+        return;
+
+    }
+
+
+    dayEvents.sort(
+        (a,b) =>
+            a.time.localeCompare(
+                b.time
+            )
+    );
+
+
+    dayEvents.forEach(
+        event => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+            item.classList.add(
+                "event-item"
+            );
+
+
+            let repeatText = "";
+
+
+            if (
+                event.repeat
+            ) {
+
+                repeatText =
+                    "매주 " +
+                    event.repeatDays
+                        .map(
+                            d =>
+                                weekNames[d]
+                        )
+                        .join(", ") +
+                    " 반복";
+
+            }
+
+
+            let scopeText = "";
+
+
+            if (
+                event.scope === "school"
+            ) {
+
+                scopeText =
+                    "🏫 학교일에만";
+
+            }
+            else if (
+                event.scope === "holiday"
+            ) {
+
+                scopeText =
+                    "🏖 방학에만";
+
+            }
+
+
+            item.innerHTML = `
+
+                <div class="event-info">
+
+                    <div class="event-time">
+                        ${event.time}
+                    </div>
+
+                    <div>
+
+                        <div class="event-name">
+                            ${escapeHTML(event.name)}
+                        </div>
+
+                        ${
+                            repeatText
+                            ?
+                            `<div class="event-repeat">
+                                ${repeatText}
+                            </div>`
+                            :
+                            ""
+                        }
+
+                        ${
+                            scopeText
+                            ?
+                            `<div class="event-mode">
+                                ${scopeText}
+                            </div>`
+                            :
+                            ""
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="delete-button"
+                    onclick="deleteEvent('${event.id}')"
+                >
+                    삭제
+                </button>
+
+            `;
+
+
+            list.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+function escapeHTML(
+    text
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        text;
+
+    return div.innerHTML;
+
+}
+
+
+/* =====================================================
+   일정 추가
+===================================================== */
+
+function openEventModal() {
+
+    document.getElementById(
+        "eventModal"
+    ).style.display =
+        "flex";
+
+
+    document.getElementById(
+        "eventDateInput"
+    ).value =
+        dateString(
+            selectedDate
+        );
+
+
+    document.getElementById(
+        "eventTimeInput"
+    ).value =
+        "12:00";
+
+
+    document.getElementById(
+        "eventNameInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "alarmTimeInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "repeatCheckbox"
+    ).checked =
+        false;
+
+
+    document.getElementById(
+        "repeatOptions"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "repeatStart"
+    ).value =
+        dateString(
+            selectedDate
+        );
+
+
+    document.getElementById(
+        "repeatEnd"
+    ).value = "";
+
+
+    document.querySelectorAll(
+        ".day-choice"
+    ).forEach(
+        button => {
+
+            button.classList.remove(
+                "selected"
+            );
+
+        }
+    );
+
+
+    document.querySelector(
+        'input[name="eventScope"][value="all"]'
+    ).checked =
+        true;
+
+}
+
+
+function closeEventModal() {
+
+    document.getElementById(
+        "eventModal"
+    ).style.display =
+        "none";
+
+}
+
+
+function toggleRepeat() {
+
+    const checked =
+        document.getElementById(
+            "repeatCheckbox"
+        ).checked;
+
+
+    document.getElementById(
+        "repeatOptions"
+    ).style.display =
+        checked
+        ? "block"
+        : "none";
+
+}
+
+
+/* 요일 */
+
+document.querySelectorAll(
+    ".day-choice"
+).forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                this.classList.toggle(
+                    "selected"
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* =====================================================
+   일정 저장
+===================================================== */
+
+function saveEvent() {
+
+    const date =
+        document.getElementById(
+            "eventDateInput"
+        ).value;
+
+
+    const time =
+        document.getElementById(
+            "eventTimeInput"
+        ).value;
+
+
+    const name =
+        document.getElementById(
+            "eventNameInput"
+        ).value.trim();
+
+
+    const alarm =
+        document.getElementById(
+            "alarmTimeInput"
+        ).value;
+
+
+    if (
+        !date ||
+        !time ||
+        !name
+    ) {
+
+        alert(
+            "날짜, 시간, 일정을 모두 입력해주세요."
+        );
+
+        return;
+
+    }
+
+
+    const repeat =
+        document.getElementById(
+            "repeatCheckbox"
+        ).checked;
+
+
+    let repeatDays = [];
+
+
+    if (repeat) {
+
+        document.querySelectorAll(
+            ".day-choice.selected"
+        ).forEach(
+            button => {
+
+                repeatDays.push(
+                    Number(
+                        button.dataset.day
+                    )
+                );
+
+            }
+        );
+
+
+        if (
+            repeatDays.length === 0
+        ) {
+
+            alert(
+                "반복할 요일을 선택해주세요."
+            );
+
+            return;
+
+        }
+
+
+        const start =
+            document.getElementById(
+                "repeatStart"
+            ).value;
+
+
+        const end =
+            document.getElementById(
+                "repeatEnd"
+            ).value;
+
+
+        if (
+            !start ||
+            !end
+        ) {
+
+            alert(
+                "반복 시작일과 종료일을 입력해주세요."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            end < start
+        ) {
+
+            alert(
+                "종료일이 시작일보다 빠릅니다."
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    const scope =
+        document.querySelector(
+            'input[name="eventScope"]:checked'
+        ).value;
+
+
+    events.push({
+
+        id:
+            Date.now().toString(),
+
+        date:
+            date,
+
+        time:
+            time,
+
+        name:
+            name,
+
+        alarm:
+            alarm,
+
+        repeat:
+            repeat,
+
+        repeatDays:
+            repeatDays,
+
+        repeatStart:
+            repeat
+            ?
+            document.getElementById(
+                "repeatStart"
+            ).value
+            :
+            "",
+
+        repeatEnd:
+            repeat
+            ?
+            document.getElementById(
+                "repeatEnd"
+            ).value
+            :
+            "",
+
+        scope:
+            scope
+
+    });
+
+
+    saveEvents();
+
+    closeEventModal();
+
+    renderEvents();
+
+    renderCalendar();
+
+}
+
+
+function deleteEvent(
+    id
+) {
+
+    if (
+        !confirm(
+            "이 일정을 삭제할까요?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    events =
+        events.filter(
+            event =>
+                event.id !== id
+        );
+
+
+    saveEvents();
+
+    renderEvents();
+
+    renderCalendar();
+
+}
+
+
+/* =====================================================
+   방학
+===================================================== */
+
+function openHolidaySettings() {
+
+    document.getElementById(
+        "holidayModal"
+    ).style.display =
+        "flex";
+
+    renderHolidayList();
+
+}
+
+
+function closeHolidaySettings() {
+
+    document.getElementById(
+        "holidayModal"
+    ).style.display =
+        "none";
+
+    renderCalendar();
+
+}
+
+
+function saveHoliday() {
+
+    const name =
+        document.getElementById(
+            "holidayName"
+        ).value.trim();
+
+
+    const start =
+        document.getElementById(
+            "holidayStart"
+        ).value;
+
+
+    const end =
+        document.getElementById(
+            "holidayEnd"
+        ).value;
+
+
+    if (
+        !name ||
+        !start ||
+        !end
+    ) {
+
+        alert(
+            "이름, 시작일, 종료일을 입력해주세요."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        end < start
+    ) {
+
+        alert(
+            "종료일이 시작일보다 빠릅니다."
+        );
+
+        return;
+
+    }
+
+
+    holidays.push({
+
+        id:
+            Date.now().toString(),
+
+        name:
+            name,
+
+        start:
+            start,
+
+        end:
+            end
+
+    });
+
+
+    saveHolidays();
+
+
+    document.getElementById(
+        "holidayName"
+    ).value = "";
+
+
+    document.getElementById(
+        "holidayStart"
+    ).value = "";
+
+
+    document.getElementById(
+        "holidayEnd"
+    ).value = "";
+
+
+    renderHolidayList();
+
+    renderCalendar();
+
+}
+
+
+function renderHolidayList() {
+
+    const list =
+        document.getElementById(
+            "holidayList"
+        );
+
+    list.innerHTML = "";
+
+
+    if (
+        holidays.length === 0
+    ) {
+
+        list.innerHTML =
+            `
+            <div class="no-events">
+                설정된 방학이나 쉬는 날이 없습니다.
+            </div>
+            `;
+
+        return;
+
+    }
+
+
+    holidays.forEach(
+        holiday => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+            item.classList.add(
+                "holiday-item"
+            );
+
+
+            item.innerHTML = `
+
+                <div>
+
+                    <div class="holiday-name">
+                        🏖
+                        ${escapeHTML(holiday.name)}
+                    </div>
+
+                    <div class="holiday-dates">
+                        ${holiday.start}
+                        ~
+                        ${holiday.end}
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="small-delete"
+                    onclick="deleteHoliday('${holiday.id}')"
+                >
+                    삭제
+                </button>
+
+            `;
+
+
+            list.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+function deleteHoliday(
+    id
+) {
+
+    if (
+        !confirm(
+            "이 쉬는 기간을 삭제할까요?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    holidays =
+        holidays.filter(
+            holiday =>
+                holiday.id !== id
+        );
+
+
+    saveHolidays();
+
+    renderHolidayList();
+
+    renderCalendar();
+
+}
+
+
+/* =====================================================
+   1년 달력
+===================================================== */
+
+function openYearCalendar() {
+
+    yearCalendarYear =
+        currentDate.getFullYear();
+
+    renderYearCalendar();
+
+    document.getElementById(
+        "yearModal"
+    ).style.display =
+        "flex";
+
+}
+
+
+function closeYearCalendar() {
+
+    document.getElementById(
+        "yearModal"
+    ).style.display =
+        "none";
+
+}
+
+
+function changeYear(
+    amount
+) {
+
+    yearCalendarYear +=
+        amount;
+
+    renderYearCalendar();
+
+}
+
+
+function renderYearCalendar() {
+
+    document.getElementById(
+        "yearTitle"
+    ).textContent =
+        `${yearCalendarYear}년`;
+
+
+    const grid =
+        document.getElementById(
+            "yearGrid"
+        );
+
+    grid.innerHTML = "";
+
+
+    for (
+        let month = 0;
+        month < 12;
+        month++
+    ) {
+
+        const box =
+            document.createElement(
+                "div"
+            );
+
+        box.classList.add(
+            "mini-month"
+        );
+
+
+        box.onclick =
+            function() {
+
+                currentDate =
+                    new Date(
+                        yearCalendarYear,
+                        month,
+                        1
+                    );
+
+                closeYearCalendar();
+
+                renderCalendar();
+
+            };
+
+
+        const title =
+            document.createElement(
+                "div"
+            );
+
+        title.classList.add(
+            "mini-title"
+        );
+
+        title.textContent =
+            monthNames[month];
+
+        box.appendChild(
+            title
+        );
+
+
+        const weekdays =
+            document.createElement(
+                "div"
+            );
+
+        weekdays.classList.add(
+            "mini-weekdays"
+        );
+
+
+        weekNames.forEach(
+            day => {
+
+                const w =
+                    document.createElement(
+                        "div"
+                    );
+
+                w.classList.add(
+                    "mini-weekday"
+                );
+
+                w.textContent =
+                    day;
+
+                weekdays.appendChild(
+                    w
+                );
+
+            }
+        );
+
+
+        box.appendChild(
+            weekdays
+        );
+
+
+        const days =
+            document.createElement(
+                "div"
+            );
+
+        days.classList.add(
+            "mini-days"
+        );
+
+
+        const firstDay =
+            new Date(
+                yearCalendarYear,
+                month,
+                1
+            ).getDay();
+
+
+        const daysInMonth =
+            new Date(
+                yearCalendarYear,
+                month + 1,
+                0
+            ).getDate();
+
+
+        for (
+            let i = 0;
+            i < firstDay;
+            i++
+        ) {
+
+            days.appendChild(
+                document.createElement(
+                    "div"
+                )
+            );
+
+        }
+
+
+        for (
+            let day = 1;
+            day <= daysInMonth;
+            day++
+        ) {
+
+            const d =
+                document.createElement(
+                    "div"
+                );
+
+            d.classList.add(
+                "mini-day"
+            );
+
+            d.textContent =
+                day;
+
+
+            const date =
+                new Date(
+                    yearCalendarYear,
+                    month,
+                    day
+                );
+
+
+            if (
+                isHoliday(date)
+            ) {
+
+                d.classList.add(
+                    "mini-holiday"
+                );
+
+            }
+
+
+            const today =
+                getKoreaDate();
+
+
+            if (
+                day === today.getDate() &&
+                month === today.getMonth() &&
+                yearCalendarYear ===
+                    today.getFullYear()
+            ) {
+
+                d.classList.add(
+                    "mini-today"
+                );
+
+            }
+
+
+            days.appendChild(
+                d
+            );
+
+        }
+
+
+        box.appendChild(
+            days
+        );
+
+        grid.appendChild(
+            box
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   알람
+===================================================== */
+
+function checkAlarms() {
+
+    const now =
+        getKoreaDate();
+
+
+    const today =
+        dateString(now);
+
+
+    const currentTime =
+        now.getHours()
+            .toString()
+            .padStart(2,"0")
+        +
+        ":" +
+        now.getMinutes()
+            .toString()
+            .padStart(2,"0");
+
+
+    events.forEach(
+        event => {
+
+            if (
+                event.alarm !==
+                currentTime
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                !eventAppliesToDate(
+                    event,
+                    now
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            const key =
+                "alarm_" +
+                event.id +
+                "_" +
+                today +
+                "_" +
+                currentTime;
+
+
+            if (
+                localStorage.getItem(
+                    key
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            localStorage.setItem(
+                key,
+                "shown"
+            );
+
+
+            showAlarm(event);
+
+        }
+    );
+
+}
+
+
+function showAlarm(
+    event
+) {
+
+    alert(
+        "🔔 일정 알림\n\n" +
+        event.name +
+        "\n" +
+        event.time
+    );
+
+}
+
+
+/* =====================================================
+   학교 일반 일정 / 시간표
+===================================================== */
+
+function openTimetable() {
+
+    renderTimetable();
+
+    document.getElementById(
+        "timetableModal"
+    ).style.display =
+        "flex";
+
+}
+
+
+function closeTimetable() {
+
+    document.getElementById(
+        "timetableModal"
+    ).style.display =
+        "none";
+
+}
+
+
+/* 시간표 그리기 */
+
+function renderTimetable() {
+
+    const body =
+        document.getElementById(
+            "timetableBody"
+        );
+
+    body.innerHTML = "";
+
+
+    timetableRows.forEach(
+        (rowName, rowIndex) => {
+
+            const tr =
+                document.createElement(
+                    "tr"
+                );
+
+
+            if (
+                rowName === "Bryant"
+            ) {
+
+                tr.classList.add(
+                    "bryant-row"
+                );
+
+            }
+
+
+            /* 왼쪽 이름 */
+
+            const nameCell =
+                document.createElement(
+                    "td"
+                );
+
+            nameCell.classList.add(
+                "slot-name"
+            );
+
+            const nameLabel =
+                document.createElement(
+                    "span"
+                );
+
+            nameLabel.classList.add(
+                "slot-name-label"
+            );
+
+            nameLabel.textContent =
+                rowName;
+
+            nameCell.appendChild(
+                nameLabel
+            );
+
+
+            if (
+                timetableTimes[rowName]
+            ) {
+
+                const timeLabel =
+                    document.createElement(
+                        "span"
+                    );
+
+                timeLabel.classList.add(
+                    "slot-name-time"
+                );
+
+                timeLabel.textContent =
+                    timetableTimes[rowName];
+
+                nameCell.appendChild(
+                    timeLabel
+                );
+
+            }
+
+
+            tr.appendChild(
+                nameCell
+            );
+
+
+            /* 월~일 */
+
+            for (
+                let day = 0;
+                day < 7;
+                day++
+            ) {
+
+                const cell =
+                    document.createElement(
+                        "td"
+                    );
+
+
+                const key =
+                    `${rowIndex}_${day}`;
+
+
+                const rawValue =
+                    timetable[key] || "";
+
+                /* 예전에는 과목만 문자열로 저장했으므로
+                   기존 시간표도 그대로 보이게 처리 */
+                const value =
+                    typeof rawValue === "string"
+                        ? { activity: rawValue, tutor: "", location: "" }
+                        : {
+                            activity: rawValue.activity || "",
+                            tutor: rawValue.tutor || "",
+                            location: rawValue.location || ""
+                        };
+
+
+                if (
+                    value.activity ||
+                    value.tutor ||
+                    value.location
+                ) {
+
+                    const text =
+                        document.createElement(
+                            "div"
+                        );
+
+                    text.classList.add(
+                        "timetable-cell"
+                    );
+
+                    if (value.activity) {
+                        const activity = document.createElement("div");
+                        activity.textContent = value.activity;
+                        activity.style.fontWeight = "bold";
+                        text.appendChild(activity);
+                    }
+
+                    if (value.tutor) {
+                        const tutor = document.createElement("div");
+                        tutor.textContent = `Tutor: ${value.tutor}`;
+                        tutor.style.fontSize = "12px";
+                        tutor.style.marginTop = "4px";
+                        text.appendChild(tutor);
+                    }
+
+                    if (value.location) {
+                        const location = document.createElement("div");
+                        location.textContent = `📍 ${value.location}`;
+                        location.style.fontSize = "12px";
+                        location.style.marginTop = "2px";
+                        text.appendChild(location);
+                    }
+
+                    cell.appendChild(
+                        text
+                    );
+
+                }
+                else {
+
+                    const empty =
+                        document.createElement(
+                            "div"
+                        );
+
+                    empty.classList.add(
+                        "empty-timetable"
+                    );
+
+                    empty.textContent =
+                        "클릭하여 입력";
+
+                    cell.appendChild(
+                        empty
+                    );
+
+                }
+
+
+                cell.onclick =
+                    function() {
+
+                        openTimetableInput(
+                            rowIndex,
+                            day,
+                            rowName
+                        );
+
+                    };
+
+
+                tr.appendChild(
+                    cell
+                );
+
+            }
+
+
+            body.appendChild(
+                tr
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   시간표 입력
+===================================================== */
+
+function openTimetableInput(
+    row,
+    day,
+    rowName
+) {
+
+    currentTimetableRow =
+        row;
+
+    currentTimetableDay =
+        day;
+
+
+    const key =
+        `${row}_${day}`;
+
+
+    document.getElementById(
+        "timetableInputTitle"
+    ).textContent =
+        `${rowName} - ${weekNames[(day + 1) % 7]}`;
+
+
+    /*
+       위 표는 월~일 순서라서
+       day 0 = 월요일이다.
+    */
+
+
+    const rawValue =
+        timetable[key] || {};
+
+    const value =
+        typeof rawValue === "string"
+            ? { activity: rawValue, tutor: "", location: "" }
+            : rawValue;
+
+
+    document.getElementById(
+        "timetableInput"
+    ).value =
+        value.activity || "";
+
+
+    document.getElementById(
+        "timetableTutorInput"
+    ).value =
+        value.tutor || "";
+
+
+    document.getElementById(
+        "timetableLocationInput"
+    ).value =
+        value.location || "";
+
+
+    document.getElementById(
+        "timetableInputModal"
+    ).style.display =
+        "flex";
+
+
+    setTimeout(
+        function() {
+
+            document.getElementById(
+                "timetableInput"
+            ).focus();
+
+        },
+        50
+    );
+
+}
+
+
+function closeTimetableInput() {
+
+    document.getElementById(
+        "timetableInputModal"
+    ).style.display =
+        "none";
+
+}
+
+
+function saveTimetableCell() {
+
+    const activity =
+        document.getElementById(
+            "timetableInput"
+        ).value.trim();
+
+    const tutor =
+        document.getElementById(
+            "timetableTutorInput"
+        ).value.trim();
+
+    const location =
+        document.getElementById(
+            "timetableLocationInput"
+        ).value.trim();
+
+
+    const key =
+        `${currentTimetableRow}_${currentTimetableDay}`;
+
+
+    if (activity || tutor || location) {
+
+        timetable[key] = {
+            activity: activity,
+            tutor: tutor,
+            location: location
+        };
+
+    }
+    else {
+
+        delete timetable[key];
+
+    }
+
+
+    saveTimetable();
+
+    closeTimetableInput();
+
+    renderTimetable();
+
+}
+
+
+/* =====================================================
+   시작
+===================================================== */
+
+renderCalendar();
+
+
+/* =====================================================
+   매 1분마다 확인
+===================================================== */
+
+setInterval(
+    function() {
+
+        renderCalendar();
+
+        checkAlarms();
+
+    },
+    60000
+);
+
+</script>
+
+</body>
+</html>
+```
